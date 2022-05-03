@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>飞天后台管理模板_飞天后台开发框架官网</title>
+	<meta name="keywords" content="飞天后台开发框架模板,飞天后台管理模板,飞天后台管理官网,飞天后台开发框架模板">
+    <meta name="description" content="[原创]飞天素材网后台管理模板iframe版">
+	
+	<link th:href="@{/admin/css/style.css}" rel="stylesheet">
+    <link th:href="@{/admin/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/admin/css/theme.css}" rel="stylesheet">
+    <link th:href="@{/admin/css/fonts.css}" rel="stylesheet">
+    <script th:src="@{/admin/js/jquery.min.js}"></script>
+    <script th:src="@{/admin/js/bootstrap.js}"></script>
+    <script th:src="@{/admin/js/jquery.cookie.js}"></script>
+    <script th:src="@{/admin/js/framework.js}"></script>
+  </head>
+  
+  <body class="theme-blue-gradient" style="overflow: hidden; ">
+
+    <div id="theme-wrapper">
+      <header class="navbar" id="header-navbar">
+        <div class="container" style="padding-right: 0px;">
+          <a class="navbar-brand" id="logo" href="#">飞天后台管理</a>
+            
+            <div>
+              <ul class="nav navbar-nav pull-left">
+                <li>
+                  <a id="make-small-nav" title="收起菜单">
+					<div class="ftdms-aside-toggler">
+                      <span class="ftdms-toggler-bar"></span>
+                      <span class="ftdms-toggler-bar"></span>
+                      <span class="ftdms-toggler-bar"></span>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pull-right" id="header-nav">
+			  <ul class="user-nav">
+                 <li style="list-style:none;margin-top:5px;">
+                 <a href="javascript:void(0)" data-toggle="dropdown">
+			     <img class="img-qrcode img-qrcode-46" th:src="@{/admin/picture/sjui.png}" alt="用户头像"><span>飞天素材网<span class="caret"></span></span>
+                 </a>
+                 <ul class="dropdown-menu dropdown-menu-right">
+                   <li> <a class="submenuitem" th:href="@{/admin/pages_profile}" data-id="rofile" data-index="100"><i class="ftsucai-58"></i> 个人信息</a> </li>
+                   <li> <a class="submenuitem" th:href="@{/admin/pages_edit_pwd}" data-id="linkpwd" data-index="101"><i class="ftsucai-edit-2"></i> 修改密码</a> </li>
+                   <li> <a class="submenuitem" href="javascript:void(0)" data-id="cache" data-index="102"><i class="ftsucai-del-2"></i> 清空缓存</a></li>
+                   <li class="divider"></li>
+                   <li><a th:href="@{/admin/pages_login}"><i class="ftsucai-exit2"></i> 退出登录</a> </li>
+                 </ul>
+                 </li>
+              </ul>
+            </div>
+
+        </div>
+      </header>
+      <div class="container" id="page-wrapper">
+        <div class="row">
+          <div id="nav-col">
+                <div class="navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+                  <ul class="nav nav-pills nav-stacked">
+
+                    <li>
+                      <a class="submenuitem" th:href="@{/admin/home}" pid="a1">
+                        <i class="ft ftsucai-82"></i>
+                        <span>数据看板</span>
+                        <i class="ft ftsucai-481 drop-icon" style="padding-left:52px;font-size:12px;top:25%;"></i>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="dropdown-toggle" href="#" data-id="a2" id="a2">
+                        <i class="ft ftsucai-UI"></i>
+                        <span>设计元素</span>
+                        <i class="ft ftsucai-139 drop-icon"></i>
+                      </a>
+                      <ul class="submenu">
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/ui_buttons}" data-id="link1" data-index="1" pid="a2">按钮</a>
+						</li>
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/ui_widgets}" data-id="link2" data-index="2" pid="a2">小部件</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_layout}" data-id="link3" data-index="3" pid="a2">布局</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_grid}" data-id="link4" data-index="4" pid="a2">格栅</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_icons}" data-id="link5" data-index="5" pid="a2">图标</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui-dropdowns}" data-id="link6" data-index="6" pid="a2">下拉菜单</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/pagination}" data-id="link7" data-index="7" pid="a2">分页导航</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_progress}" data-id="link8" data-index="8" pid="a2">进度条</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_tabs}" data-id="link9" data-index="9" pid="a2">选项卡</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_step}" data-id="link10" data-index="10" pid="a2">步骤</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_ribbons}" data-id="link11" data-index="11" pid="a2">丝带</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ui_other}" data-id="link13" data-index="13" pid="a2">其他</a>
+						</li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <a class="dropdown-toggle" href="#" data-id="a3" id="a3">
+                        <i class="ft ftsucai-edit-2"></i>
+                        <span>表单元素</span>
+                        <i class="ft ftsucai-139 drop-icon"></i>
+                      </a>
+                      <ul class="submenu">
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/forms_elements}" data-id="link21" data-index="21" pid="a3">基本元素</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/forms_radio}" data-id="link22" data-index="22" pid="a3">单选框</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/forms_checkbox}" data-id="link23" data-index="23" pid="a3">复选框</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/forms_switch}" data-id="link24" data-index="24" pid="a3">开关</a>
+						</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a class="dropdown-toggle" href="#" data-id="a4" id="a4">
+                        <i class="ft ftsucai-19"></i>
+                        <span>示例页面</span>
+                        <i class="ft ftsucai-139 drop-icon"></i>
+                      </a>
+                      <ul class="submenu">
+					    <li>
+                          <a class="submenuitem" th:href="@{/admin/pages_add_doc}" data-id="link33" data-index="33" pid="a4">新增文档</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/ftdms_row}" data-id="link35" data-index="35" pid="a4">混排表单</a>
+						</li>
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/pages_config}" data-id="link31" data-index="31" pid="a4">网站配置</a>
+						</li>
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/pages_permission}" data-id="link32" data-index="32" pid="a4">权限设置</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/pages_guide}" data-id="link34" data-index="34" pid="a4">表单向导</a>
+						</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a class="dropdown-toggle" href="#" data-id="a5" id="a5">
+                        <i class="ft ftsucai-table"></i>
+                        <span>常用列表</span>
+                        <i class="ft ftsucai-139 drop-icon"></i>
+                      </a>
+                      <ul class="submenu">
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/pages_data}" data-id="link41" data-index="41" pid="a5">普通式列表</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/datatables}" data-id="link42" data-index="42" pid="a5">自定义列表</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/pages_pic_list}" data-id="link43" data-index="43" pid="a5">图片列表</a>
+						</li>
+                      </ul>
+                    </li>
+					<li>
+                      <a class="dropdown-toggle" href="#" data-id="a6" id="a6">
+                        <i class="ft ftsucai-js"></i>
+                        <span>脚本插件</span>
+                        <i class="ft ftsucai-139 drop-icon"></i>
+                      </a>
+                      <ul class="submenu">
+					    <li>
+						  <a class="submenuitem" th:href="@{/admin/calendar}" data-id="link50" data-index="50" pid="a6">日历插件</a>
+						</li>
+                        <li>
+						  <a class="submenuitem" th:href="@{/admin/js_datepicke}" data-id="link51" data-index="51" pid="a6">日期选取</a>
+						</li>
+						<li>
+						  <a class="submenuitem" th:href="@{/admin/js_sliders}" data-id="link52" data-index="52" pid="a6">滑块特效</a>
+						</li>
+						<li>
+						  <a class="submenuitem" th:href="@{/admin/js_colorpicker}" data-id="link53" data-index="53" pid="a6">色码选取</a>
+						</li>
+						<li>
+						  <a class="submenuitem" th:href="@{/admin/js_msg}" data-id="link54" data-index="54" pid="a6">对话框</a>
+						</li>
+						<li>
+						  <a class="submenuitem" th:href="@{/admin/js_tags_input}" data-id="link55" data-index="55" pid="a6">标签插件</a>
+						</li>
+						<li>
+						  <a class="submenuitem" th:href="@{/admin/js_notify}" data-id="link56" data-index="56" pid="a6">通知消息</a>
+						</li>
+						<li>
+						  <a class="submenuitem" th:href="@{/admin/js_verify}" data-id="link57" data-index="57" pid="a6">验证码</a>
+						</li>
+                      </ul>
+                    </li>
+					<li>
+                      <a class="dropdown-toggle" href="#" data-id="a7" id="a7">
+                        <i class="ft ftsucai-315"></i>
+                        <span>统计图表</span>
+                        <i class="ft ftsucai-139 drop-icon"></i>
+                      </a>
+                      <ul class="submenu">
+					    <li>
+                          <a class="submenuitem" th:href="@{/admin/js_Highcharts}" data-id="link72" data-index="72" pid="a7">Highcharts</a>
+						</li>
+                        <li>
+                          <a class="submenuitem" th:href="@{/admin/js_chartjs}" data-id="link71" data-index="71" pid="a7">ChartJS</a>
+						</li>
+						<li>
+                          <a class="submenuitem" th:href="@{/admin/js_ApexCharts}" data-id="link72" data-index="72" pid="a7">ApexChart</a>
+						</li>
+                      </ul>
+                    </li>
+
+                  </ul>
+              </div>
+
+          </div>
+		  <!--右侧内容部分开始-->
+          <div id="content-wrapper">
+            <div class="content-tabs" style="height:44px;border-bottom:2px solid #f0f0f0;">
+              <button class="roll-nav roll-left tabLeft">
+                <i class="ft ftsucai-backward2"></i>
+              </button>
+              <nav class="page-tabs menuTabs">
+                <div class="page-tabs-content" style="margin-left: 0px;">
+                  <a class="menuTab active" href="javascript:;" data-id="home.html">数据看板</a></div>
+              </nav>
+              <button class="roll-nav roll-right tabRight">
+                <i class="ft ftsucai-forward3"></i>
+              </button>
+              <div class="btn-group roll-nav roll-right">
+                <button class="dropdown tabClose" data-toggle="dropdown">页签操作
+                  <i class="ft caret" style="padding-top: 3px;"></i>
+				</button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li>
+                    <a class="tabReload" href="javascript:void(0);"><i class="ft ftsucai-spinner3"></i>刷新当前页面</a></li>
+                  <li>
+                    <a class="tabCloseCurrent" href="javascript:void(0);"><i class="ft ftsucai-close-3"></i>关闭当前页面</a></li>
+                  <li>
+                    <a class="tabCloseAll" href="javascript:void(0);"><i class="ft ftsucai-77"></i>关闭全部页面</a></li>
+                  <li>
+                    <a class="tabCloseOther" href="javascript:void(0);"><i class="ft ftsucai-120"></i>除此之外全关</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="content-iframe" style="background-color: #f9f9f9;">
+              <div class="mainContent" id="content-main" style="margin: 0px; padding: 0px; height: 1050px;">
+				<iframe width="100%" height="100%" class="main_iframe" id="default" th:src="@{/admin/home}" frameborder="0" data-id="home.html"></iframe>
+              </div>
+            </div>
+          </div>
+		  <!--右侧内容部分结束-->
+        </div>
+      </div>
+    </div>
+    <div id="loadingPage" style="display: none;">
+      <div class="loading-shade"></div>
+      <div class="loading-content" onclick="$.loading(false)">数据加载中，请稍后…</div>
+	</div>
+    <script th:src="@{/admin/js/index.js}"></script>
+    <script th:src="@{/admin/js/indextab.js}"></script>
+    <script th:src="@{/admin/js/pace.min.js}"></script>
+  </body>
+
+</html>
