@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.film.dao.SortMapper">
+    <sql id="selectFields">
+        id, name, create_time
+    </sql>
+
+    <sql id="insertFields">
+        name, create_time
+    </sql>
+
+    <select id="selectSorts" resultType="com.film.entity.Sort">
+        select id, name, create_time from sort
+    </select>
+
+    <select id="selectSortById" resultType="com.film.entity.Sort">
+        select id, name, create_time
+        from sort
+        where id=#{id}
+    </select>
+
+    <select id="selectSortByName" resultType="com.film.entity.Sort">
+        select id, name, create_time
+        from sort
+        where name=#{name}
+    </select>
+
+    <insert id="insertSort" useGeneratedKeys="true" keyProperty="id" parameterType="com.film.entity.Sort">
+        insert into sort(name, create_time)
+        values(#{name}, #{createTime})
+    </insert>
+
+    <update id="updateNameById">
+        update sort set name=#{name}
+        where id=#{id}
+    </update>
+</mapper>

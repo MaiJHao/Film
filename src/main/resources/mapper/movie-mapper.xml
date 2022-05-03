@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.film.dao.MovieMapper">
+    <sql id="selectFields">
+        id,name,sort_id,place,release_time,performer,poster,play_address,introduce,rating,dislike,edit_time
+    </sql>
+
+    <sql id="insertFields">
+        name,sort_id,place,release_time,performer,poster,play_address,introduce,rating,dislike,edit_time
+    </sql>
+
+    <select id="selectMovies" resultType="com.film.entity.Movie">
+        select <include refid="selectFields"></include>
+        from movie
+        order by rating desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="selectMovieRows" resultType="int">
+        select count(id)
+        from movie
+    </select>
+
+    <select id="selectMovieById" resultType="com.film.entity.Movie">
+        select <include refid="selectFields"></include>
+        from movie
+        where id=#{id}
+    </select>
+
+    <select id="selectMovieByName" resultType="com.film.entity.Movie">
+        select <include refid="selectFields"></include>
+        from movie
+        where name=#{name}
+    </select>
+
+    <insert id="insertMovie" useGeneratedKeys="true" keyProperty="id" parameterType="com.film.entity.Movie">
+        insert into movie(<include refid="insertFields"></include>)
+        values(#{name},#{sortId},#{place},#{releaseTime},#{performer},#{poster},#{playAddress},#{introduce},#{rating},#{dislike},#{editTime})
+    </insert>
+
+    <update id="updateMovieById" parameterType="com.film.entity.Movie">
+        update movie
+        <set>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="sortId!=0">
+                sort_id=#{sortId},
+            </if>
+            <if test="place!=null">
+                place=#{place},
+            </if>
+            <if test="releaseTime!=null">
+                release_time=#{releaseTime},
+            </if>
+            <if test="performer!=null">
+                performer=#{performer},
+            </if>
+            <if test="poster!=null">
+                poster=#{poster},
+            </if>
+            <if test="playAddress!=null">
+                play_address=#{playAddress},
+            </if>
+            <if test="introduce!=null">
+                introduce=#{introduce},
+            </if>
+            <if test="editTime!=null">
+                edit_time=#{editTime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateMovieRating">
+        update movie
+        set rating=#{rating}
+        where id=#{id}
+    </update>
+
+
+    <select id="selectMoviesBySort" resultType="com.film.entity.Movie">
+        select <include refid="selectFields"></include>
+        from movie
+        where sort_id=#{sortId}
+        order by rating
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="selectNewMovie" resultType="com.film.entity.Movie">
+        select <include refid="selectFields"></include>
+        from movie
+        order by release_time
+        limit 0, 4
+    </select>
+</mapper>

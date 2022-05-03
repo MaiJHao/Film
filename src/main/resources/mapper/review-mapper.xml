@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.film.dao.ReviewMapper">
+    <sql id="selectFields">
+        id,user_id,movie_id,title,content,type,status,create_time,comment_count,rating,score
+    </sql>
+
+    <sql id="insertFields">
+        user_id,movie_id,title,content,type,status,create_time,comment_count,rating,score
+    </sql>
+
+    <select id="selectReviews" resultType="com.film.entity.Review">
+        select <include refid="selectFields"></include>
+        from review
+        order by create_time asc
+        limit #{offset}, #{limit}
+    </select>
+    
+    <select id="selectReviewsByUserId" resultType="com.film.entity.Review">
+        select <include refid="selectFields"></include>
+        from review
+        where user_id=#{userId}
+    </select>
+
+    <select id="selectReviewsByMovieId" resultType="com.film.entity.Review">
+        select <include refid="selectFields"></include>
+        from review
+        where movie_id=#{movieId}
+        order by create_time
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectReviewById" resultType="com.film.entity.Review">
+        select <include refid="selectFields"></include>
+        from review
+        where id=#{id}
+    </select>
+
+    <select id="selectReviewCountByMovieId" resultType="int">
+        select count(id)
+        from review
+        where movie_id=#{movieId}
+    </select>
+
+    <insert id="insertReview" useGeneratedKeys="true" keyProperty="id" parameterType="com.film.entity.Review">
+        insert into review(<include refid="insertFields"></include>)
+        values(#{userId},#{movieId},#{title},#{content},#{type}
+        ,#{status},#{createTime},#{commentCount},#{rating},#{score})
+    </insert>
+
+    <delete id="deleteReviewById">
+        delete from review
+        where id=#{id}
+    </delete>
+
+    <update id="updateCommentCount">
+        update review
+        set comment_count=#{commentCount}
+        where id=#{id}
+    </update>
+
+    <select id="selectMovieAvgRating" resultType="double">
+        select AVG(rating)
+        from review
+        where movie_id=#{movieId}
+    </select>
+
+    <select id="selectCommentCountByMovieId" resultType="int">
+        select count(id)
+        from review
+        where movie_id=#{movieId}
+    </select>
+</mapper>
