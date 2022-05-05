@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">	
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<title>权限添加信息表</title>
+	<link rel="stylesheet" type="text/css" href="../layui/css/layui.css">
+    <script src="../layui/layui.js" charset="utf-8"></script>
+    <script src="../layui/layui.all.js" charset="utf-8"></script>
+    <script src="../scripts/jquery.min.js"></script>
+    
+    <style>
+      body{padding: 20px;}
+    </style>
+	</head>
+	
+	<body>
+		<form class="layui-form layui-form-pane1" action="${pageContext.request.contextPath}/RoleServlet?action=addDataOrUpdate" method="post" id="subform">
+    <div class="layui-form-item">
+    <label class="layui-form-label">角色名称:</label>
+    <div class="layui-input-block">
+      <input type="text" name="rolename" id="rolename" lay-verify="required|title"  required  placeholder="请输入角色名称" autocomplete="off" class="layui-input">
+    </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择权限</label>
+        <br><br>
+        <div class="layui-input-block">
+            <div id="userRoles" class="demo-tree-more"></div>
+        </div>
+    </div>
+    <input type="hidden" name="rolesinfo" id="rolesinfo">
+    <br>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" type="submit" lay-demo="getChecked">提交</button>
+            <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+        </div>
+    </div>
+</form>
+         
+<script>
+layui.use(['tree', 'util'], function(){
+  var tree = layui.tree
+  ,layer = layui.layer
+  ,util = layui.util
+  
+  //模拟数据
+  ,data = [{
+    title: '主页面'
+    ,id: 1
+    ,field: 'name1'
+    ,checked: true
+    ,spread: true
+  },{
+    title: '老师操作'
+    ,id: 2
+    ,field: ''
+    ,checked: true
+    ,spread: true
+    ,children: [
+    {
+      title: '学生成绩统计'
+      ,id: 3
+      ,field: ''
+      ,spread: true
+    },{
+      title: '学生成绩统计'
+      ,id: 4
+      ,field: ''
+    },{
+      title: '学生管理'
+      ,id: 5
+      ,field: ''
+    }]
+  },{
+    title: '学生操作'
+    ,id: 6
+    ,field: ''
+    ,spread: true
+    ,children: [
+    {
+      title: '学生成绩结果'
+      ,id: 7
+      ,field: ''
+      ,spread: true
+    },{
+      title: '学生能成绩统计'
+      ,id: 8
+      ,field: ''
+    }]
+  },{
+    title: '系统管理'
+    ,id: 15
+    ,field: ''
+    ,spread: true
+    ,children: [
+    {
+      title: '日志情况'
+      ,id: 16
+      ,field: ''
+      ,spread: true
+    },{
+      title: '教师用户管理'
+      ,id: 17
+      ,field: ''
+    },{
+      title: '权限管理'
+      ,id: 18
+      ,field: ''
+    }]
+  }
+  ]
+  
+  //基本演示
+  tree.render({
+    elem: '#userRoles'
+    ,data: data
+    ,showCheckbox: true  //是否显示复选框
+    ,id: 'demoId1'
+    ,isJump: false //是否允许点击节点时弹出新窗口跳转,true-->false
+    ,click: function(obj){
+      var data = obj.data;  //获取当前点击的节点数据
+      //layer.msg('状态：'+ obj.state + '<br>节点数据：' + JSON.stringify(data));
+    }
+  });
+  
+  //提交数据内容
+  util.event('lay-demo', {
+    getChecked: function(othis){
+      var checkedData = tree.getChecked('demoId1'); //获取选中节点的数据   
+      layer.alert(JSON.stringify(checkedData), {shade:0});
+      $("#rolesinfo").val(JSON.stringify(checkedData));   
+      //提交数据关闭窗口
+      var subform= $(parent.document.body).children("div[id='mianFromDiv']").append($("#subform"));
+	  //获取窗口索引,关闭弹窗
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index);	
+      //发送请求	   
+	  $("#subform").submit();
+	  }    
+  });
+});
+</script>
+	</body>
+</html>

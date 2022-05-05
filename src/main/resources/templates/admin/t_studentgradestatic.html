@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">	
+	<meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+	<link rel="stylesheet" href="../css/xadmin.css">
+	<link rel="stylesheet" href="../layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../css/amazeui.min.css"/>
+	
+    <script src="../scripts/jquery.min.js"></script>
+    <script src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script src="../js/echarts.min.js"></script> 
+	<title>学生成绩列表</title>
+	</head>
+	
+	<body>
+	<div class="x-body">
+      <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">
+          <input class="layui-input" placeholder="考试周次" name="testweekly" id="testweekly">
+          <input class="layui-input" placeholder="学生班级" name="stuclass" id="stuclass">                    
+          <button class="layui-btn" onclick="searchByInfo()"><i class="layui-icon">&#xe615;</i>
+          </button>
+        </form>
+      </div>
+      <hr>
+      <table class="layui-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>学生姓名</th>
+            <th>学号</th>           
+            <th>考试批次</th>      
+            <th>学生成绩</th>
+            <th>操作日期</th>  
+            <th>添加日期</th>  
+            <th>内容简介</th>        
+            <th>操作</th>
+        </thead>
+        <tbody>
+          <tr>
+           
+            <td>1 </td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7</td>
+            <td>8</td>
+           
+            <td class="td-manage">
+              <a title="编辑"  onclick="stugrade_edit('this','stu_id')" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i>
+              </a>
+              <a title="删除" onclick="stugrade_delete(this,'stu_id')" href="javascript:;">
+                <i class="layui-icon">&#xe640;</i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+ <hr class="layui-bg-green">
+ <!--echart_part-->
+ <div id="container"  style="height: 380px"></div>
+ 
+<!--
+	作者：offline
+	时间：2021-01-19
+	描述：基本操作的js内容
+--> 
+<script>
+//layui自启动
+layui.use('layer', function(){
+  $('.demo').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+
+
+//用户自定义相关函数
+function stugrade_delete(obj,getid){  
+	layer.confirm('确定删除？', {btn: ['确定','取消']},
+	 function(){
+        //发送删除的请求        
+        layer.msg('已经删除', {icon: 1});
+      }, function(){
+        layer.msg('取消删除', {});
+      });
+}
+
+//添加操作
+function stugrade_add(){
+     layer.open({
+       type: 2,
+       area: ['700px', '450px'],
+       fixed: false, //不固定
+       shadeClose: true,
+       maxmin: true,
+       content: 'book-type-add.jsp',
+       end: function(){
+		// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+		if($("#subform").length === 1){
+			$("#subform").submit();
+		}
+	    }
+    });
+}
+
+//编辑操作
+function stugrade_edit(obj,getid){
+     layer.open({
+       type: 2,
+       area: ['700px', '450px'],
+       fixed: false, //不固定
+       shadeClose: true,
+       maxmin: true,
+       //跳出相对路劲，目前是在根目录下面
+       content: '',
+       end: function(){
+		// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+		if($("#subform").length === 1){
+			$("#subform").submit();
+		}
+	    }
+    });
+}
+
+//搜索操作
+function searchByInfo(){
+  var getBookName = $("#bookname").val();
+  var getBookauthor = $("#author").val();
+  var form = document.getElementById("searchByInfo");
+  form.onsubmit = function(form){
+  if (getBookName == "" && getBookauthor == ""){
+	  layer.msg('至少填写一个查询信息', {icon: 0.5});
+	  return false;
+   }else{ 
+      $("#searchByInfo").attr("").submit();
+  }
+  }
+}
+</script>	
+
+
+<!--
+	作者：offline
+	时间：2021-01-19
+	描述：图标显示
+-->
+ <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    title: {
+        text: '某班级计算机基础考试成绩',
+        subtext: '数据来源于文件导入'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data: ['学生成绩']
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: 'category',
+            data: ['0~10', '10~20', '20~30', '30~40', '40~50', '50~60', '60~70', '70~80', '80~90', '90~100']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '学生成绩',
+            type: 'bar',
+            data: [5, 6, 2, 0, 0, 20, 17, 4, 8, 2],
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }
+        }
+    ]
+};
+
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+</script>
+</body>
+</html>
