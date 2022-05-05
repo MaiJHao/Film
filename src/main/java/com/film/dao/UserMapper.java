@@ -13,6 +13,8 @@ public interface UserMapper {
 
     User selectByEmail(String email);
 
+    List<User> selectUsers(int offset, int limit);
+
     int insertUser(User user);
 
     int updatePassword(int id, String password);

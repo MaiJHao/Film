@@ -36,4 +36,10 @@
         update sort set name=#{name}
         where id=#{id}
     </update>
+
+    <select id="selectSortList" resultType="com.film.entity.Sort">
+        select <include refid="selectFields"></include>
+        from sort
+        limit #{offset}, #{limit}
+    </select>
 </mapper>

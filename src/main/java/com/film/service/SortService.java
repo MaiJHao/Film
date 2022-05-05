@@ -40,4 +40,8 @@ public class SortService {
 
         return rows;
     }
+
+    public List<Sort> findSortList(int offset,int limit) {
+        return sortMapper.selectSortList(offset, limit);
+    }
 }

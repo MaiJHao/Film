@@ -44,4 +44,10 @@
         set header_url=#{headerUrl}
         where id=#{id}
     </update>
+
+    <select id="selectUsers" resultType="com.film.entity.User">
+        select <include refid="selectFields"></include>
+        from user
+        limit #{offset},#{limit}
+    </select>
 </mapper>

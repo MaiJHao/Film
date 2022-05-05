@@ -9,6 +9,8 @@ import java.util.List;
 public interface SortMapper {
     List<Sort> selectSorts();
 
+    List<Sort> selectSortList(int offset, int limit);
+
     Sort selectSortById(int id);
 
     Sort selectSortByName(String name);

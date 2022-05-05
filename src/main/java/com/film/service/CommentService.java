@@ -54,4 +54,8 @@ public class CommentService {
         int count = commentMapper.selectCommentCountByEntity(entityType, entityId);
         return count;
     }
+
+    public List<Comment> findComments(int offset, int limit) {
+        return commentMapper.selectComments(offset, limit);
+    }
 }

@@ -279,4 +279,42 @@ public class UserController implements FilmConstant {
             }
         }
     }
+
+
+    @RequestMapping("/admin/login")
+    public String adminLogin(String username, String password, String code, boolean remember,
+                        Model model, HttpSession session, HttpServletResponse response,
+                        @CookieValue("kaptchaOwner") String kaptchaOwner) {
+        // 获取验证码
+        // String kaptcha = (String) session.getAttribute("kaptcha");
+        String kaptcha = null;
+        if (StringUtils.isNotBlank(kaptchaOwner)) {
+            String redisKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
+            kaptcha = (String) redisTemplate.opsForValue().get(redisKey);
+        }
+
+        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
+            model.addAttribute("codeMsg", "验证码不正确");
+            return "/admin/login";
+        }
+
+        // 设置登录凭证有效时间
+        int expiredSeconds = remember ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
+        // 检查账号密码
+        Map<String, Object> map = userService.login(username, password, expiredSeconds);
+        if (map.containsKey("ticket")) {
+            Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
+            // 设置cookie有效范围为整个项目
+            cookie.setPath(contextPath);
+            // 设置cookie有效期
+            cookie.setMaxAge(expiredSeconds);
+            // 响应cookie数据
+            response.addCookie(cookie);
+            return "redirect:/admin/index";
+        } else {
+            model.addAttribute("usernameMsg", map.get("usernameMsg"));
+            model.addAttribute("passwordMsg", map.get("passwordMsg"));
+            return "/admin/login";
+        }
+    }
 }
