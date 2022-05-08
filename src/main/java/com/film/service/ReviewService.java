@@ -61,4 +61,12 @@ public class ReviewService {
     public int findCommentCountByMovieId(int movieId) {
         return reviewMapper.selectCommentCountByMovieId(movieId);
     }
+
+    public int deleteReviewById(int id) {
+        return reviewMapper.deleteReviewById(id);
+    }
+
+    public int findReviewRows() {
+        return reviewMapper.selectReviewCount();
+    }
 }

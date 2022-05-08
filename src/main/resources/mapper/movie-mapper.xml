@@ -95,4 +95,8 @@
         order by release_time
         limit 0, 4
     </select>
+
+    <delete id="deleteMovieById">
+        delete from movie where id=#{id}
+    </delete>
 </mapper>

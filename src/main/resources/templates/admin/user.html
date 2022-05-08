@@ -19,18 +19,18 @@
         <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">      
           <input type="text" name="username" id="username" placeholder="输入查询用户名" autocomplete="off" class="layui-input">
           <input type="text" name="" id="email" placeholder="输入查询邮箱" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  onclick="searchByInfo()"><i class="layui-icon">&#xe615;</i></button>
+          <button class="layui-btn"  onclick="searchUsers()"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <xblock>       
-        <button class="layui-btn" onclick="x_admin_show('添加教师信息','#')"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','/admin/addUser')"><i class="layui-icon"></i>添加</button>
         <a href="">
         <span class="x-right" style="line-height:40px">
         <button class="layui-btn"><i class="layui-icon">&#xe65c;</i>返回</button>
         </span>
         </a>
       </xblock>
-      <table class="layui-table">
+      <table class="layui-table" id="userTable">
         <thead>
           <tr>
             <th>
@@ -50,8 +50,10 @@
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
             </td>
             <td th:utext="${user.username}">1</td>
-            <td th:utext="${user.email}">张三</td>
-            <td th:utext="${user.type}">20202432</td>
+            <td contenteditable="true">
+                <span th:utext="${user.email}" th:value="${user.email}" th:id="|tdEmail${user.id}|">email</span>
+            </td>
+            <td th:utext="${user.type}">type</td>
             <td th:utext="${user.createTime}">计算机应用1班</td>
                       
             <td class="td-status">
@@ -62,10 +64,10 @@
               <a onclick="stuInfo_stop(this,'${adm.admin_id}')" href="javascript:;"  title="启用">
                 <i class="layui-icon">&#xe601;</i>
               </a>         
-              <a title="编辑"  onclick="stuInfo_edit('编辑','${adm.admin_id}')" href="javascript:;">
+              <a title="编辑"  th:onclick="|editUser(${user.id})|" href="javascript:;">
                 <i class="layui-icon">&#xe642;</i>
               </a>
-              <a title="删除" onclick="stuInfo_delete(this,'${adm.admin_id}')" href="javascript:;">
+              <a title="删除" th:onclick="|deleteUser(this,${user.id})|" href="javascript:;">
                 <i class="layui-icon">&#xe640;</i>
               </a>
             </td>
@@ -74,20 +76,30 @@
         </tbody>
       </table>
       </div>
-      
-      <!--page begin-->
-      <div class="am-cf">
-               共30 条记录, 每页  6条, 当前为  1 页
-     <div class="am-fr">
-     <ul class="am-pagination">
-      <li><a href="javascript:;" onclick="admin_getFirstPage(this,'${sessionScope.currentPage}')" >首页</a></li>
-      <li><a href="javascript:;" onclick="admin_getPriverPage('${sessionScope.dataCount}','${sessionScope.currentPage}')" >上一页</a></li>
-      <li><a href="javascript:;" onclick="admin_getNextPage('${sessionScope.dataCount}','${sessionScope.currentPage}')" >下一页</a></li>
-      <li><a href="javascript:;" onclick="admin_getLastPAge(this,'${sessionScope.dataCount}')" >尾页</a></li>
-      </ul>
-     </div>
-     </div>
-     <!--page end  -->
+
+    <!--page begin-->
+    <div th:fragment="pagination">
+        <div style="margin-left: 40%">
+            共<span th:text="${page.rows}"></span> 条记录, 每页  <span th:text="${page.limit}"></span>条, 当前为  <span th:text="${page.current}"></span> 页
+            <div>
+                <ul class="am-pagination">
+                    <li th:class="${page.current==1?'disabled':''}">
+                        <a th:href="@{${page.path}(current=1)}">首页</a>
+                    </li>
+                    <li th:class="${page.current==1?'disabled':''}">
+                        <a th:href="@{${page.path}(current=${page.current-1})}">上一页</a>
+                    </li>
+                    <li th:class="${page.current>=page.total?'disabled':''}">
+                        <a th:href="@{${page.path}(current=${page.current+1})}">下一页</a>
+                    </li>
+                    <li th:class="${page.current==page.total?'disabled':''}">
+                        <a th:href="@{${page.path}(current=${page.total})}">尾页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--page end  -->
  
  
  <!--用户操作使用form表单提交信息-->
@@ -133,7 +145,7 @@ function admin_delete(obj,getid){
 
 
 //信息编辑
-function adminInfo_edit(obj,getid){
+function edit(obj,id){
      layer.open({
        type: 2,
        area: ['700px', '450px'],
@@ -141,7 +153,8 @@ function adminInfo_edit(obj,getid){
        shadeClose: true,
        maxmin: true,
        //跳出相对路劲，目前是在根目录下面
-       content: '${pageContext.request.contextPath}/AdminServlet?action=editAdmQuery&admin_id='+getid,
+       //   '${pageContext.request.contextPath}/AdminServlet?
+       content: CONTEXT_PATH + "/admin/",
        end: function(){
 		// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
 		if($("#subform").length === 1){
@@ -194,7 +207,94 @@ function admin_getNextPage(dataCount,currentPage){
 function admin_getLastPAge(obj,dataCount){
     var laetPage= Math.ceil(dataCount/10);
     $("#adminsendOrder").attr("action","${pageContext.request.contextPath}/AdminServlet?action=showAdmData&currentPage="+laetPage).submit();  
-}    
+}
+
+function editUser(id) {
+
+    layui.use(['table','form','jquery'], function() {
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+
+        layer.confirm('确认修改？', {
+            btn: ['确定', '取消'] //可以无限个按钮
+            ,
+            btn2: function(index, layero) {
+                //按钮【按钮二】的回调
+                console.log(123)
+            }
+        }, function(index, layero) {
+            $.ajax({
+                url: CONTEXT_PATH + "/user/admin/updateUser/",
+                data: {
+                    "id": id,
+                    "email" : $("#tdEmail"+id).text()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        alert("修改成功");
+                    }
+                }
+            })
+            layer.close(index);
+        }, function(index) {
+            //按钮【按钮二】的回调
+        });
+    });
+}
+
+function deleteUser(obj,id) {
+    layui.use(['table','form','jquery'], function() {
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+
+        layer.confirm('确定删除？', {btn: ['确定','取消']}, function(){
+            //发送删除的请求
+            $.ajax({
+                url: CONTEXT_PATH + "/user/admin/deleteUser/" + id,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg('删除成功', {icon: 1}, {time: 10});
+                        setTimeout(function () { location.reload() }, 2000);
+                    } else {
+
+                    }
+                }
+            })
+            // table.reload('testReload', {//testReload是组件名称,表格名
+            //     page: {//page参数是指重新刷新后从第几页开始
+            //         curr: 1 //重新从第 1 页开始
+            //     }
+            //     ,where: {//where是指你要往后台发的参数的键值对,可以不加key{}
+            //         key: {
+            //             id: demoReload.val()
+            //         }
+            //     }
+            // }, 'data');//data是默认值
+        }, function(){
+            layer.msg('取消删除', {});
+        });
+    });
+}
+
+function searchUsers() {
+     let username = $("#username").val();
+     let email = $("#email").val();
+     $.ajax({
+         url: CONTEXT_PATH + "/user/admin/searchUsers",
+         data: {
+             "username": username,
+             "email": email
+         },
+         dataType: "json",
+         success: function (data) {
+             alert(data);
+         }
+     })
+}
   
 </script>
 	</body>

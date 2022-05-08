@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+
+        <link rel="stylesheet" th:href="@{/admin/layui/css/layui.css}">
+        <script th:src="@{/admin/layui/layui.js}"></script>
+        <script th:src="@{/admin/scripts/jquery.min.js}"></script>
+        
+		<title>用户添加</title>
+		<style>
+            body{padding: 10px;}
+        </style>
+	</head>
+	
+	<body>
+   <form class="layui-form layui-form-pane1" th:action="@{/user/admin/addUser}"  id ="subform" method="post">
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户名</label>
+    <div class="layui-input-block">
+      <input type="text" id="name" name="username" lay-verify="required|title" required placeholder="请输入用户名" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+    <div class="layui-input-block">
+      <input type="number" id="password" name="password" lay-verify="required|number" required placeholder="请输入密码" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户权限</label>
+    <div class="layui-input-block">
+      <select id="type" name="type" lay-filter="adminRole">
+        <option value="">请选择权限</option>
+          <option value="1">管理员</option>
+          <option value="2">普通用户</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">邮箱</label>
+    <div class="layui-input-block">
+      <input type="text" id="email" name="email" lay-verify="required|title" required placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="*">添加</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+
+<br><br><br>
+
+<script>
+//加载layui信息
+layui.use('form', function(){
+  var form = layui.form;
+  //layui日期选择
+  layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#createTime', //指定元素
+          value: new Date()
+        });
+    });
+  
+  
+  //监听提交
+  form.on('submit(*)', function(data){
+      /*$.ajax({
+          url: "/film/user/admin/addUser",
+          type: "post",
+          data: {
+              "username": $("#username").val(),
+              "password": $("#password").val(),
+              "email": $("#email").val(),
+              "type": $("#type").val()
+          },
+          dataType: "json",
+          success: function (data) {
+              if (data.code == 0) {
+                  alert(12);
+
+              } else if(data.map){
+                  alert(data.map)
+              } else {
+
+              }
+          }
+      })*/
+      var subform= $(parent.document.body).children("div[id='mianFromDiv']").append($("#subform"));
+      //获取窗口索引,关闭弹窗
+      var index=parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index)
+
+    //发送请求	   
+	$("#subform").submit();
+  });
+  
+});
+
+</script>
+
+</body>
+</html>

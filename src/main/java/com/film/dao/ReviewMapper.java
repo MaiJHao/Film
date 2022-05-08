@@ -27,4 +27,6 @@ public interface ReviewMapper {
     double selectMovieAvgRating(int movieId);
 
     int selectCommentCountByMovieId(int movieId);
+
+    int selectReviewCount();
 }

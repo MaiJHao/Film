@@ -1,6 +1,8 @@
 package com.film.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.film.annotation.LoginRequired;
+import com.film.entity.Page;
 import com.film.entity.User;
 import com.film.service.UserService;
 import com.film.utils.FilmConstant;
@@ -29,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -301,7 +304,7 @@ public class UserController implements FilmConstant {
         // 设置登录凭证有效时间
         int expiredSeconds = remember ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
         // 检查账号密码
-        Map<String, Object> map = userService.login(username, password, expiredSeconds);
+        Map<String, Object> map = userService.adminLogin(username, password, expiredSeconds);
         if (map.containsKey("ticket")) {
             Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
             // 设置cookie有效范围为整个项目
@@ -314,7 +317,68 @@ public class UserController implements FilmConstant {
         } else {
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
             model.addAttribute("passwordMsg", map.get("passwordMsg"));
-            return "/admin/login";
+            return "forward:/admin/login";
         }
+    }
+
+    @RequestMapping(value = "/admin/logout", method = RequestMethod.GET)
+    public String adminLogout(@CookieValue("ticket") String ticket) {
+        userService.logout(ticket);
+        return "redirect:/admin/index";
+    }
+
+    @RequestMapping("/admin/addUser")
+    public String addUser(String username, String password, String email, int type, Model model, HttpSession session) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setType(type);
+        Map<String, Object> map = userService.addUser(user);
+        if (map == null || map.isEmpty()) {
+            return "redirect:/admin/index";
+        } else {
+            model.addAttribute("usernameMsg", map.get("usernameMsg"));
+            model.addAttribute("passwordMsg", map.get("passwordMsg"));
+            model.addAttribute("emailMsg", map.get("emailMsg"));
+            return "redirect:/admin/index";
+        }
+    }
+
+    @RequestMapping("/admin/updateUser")
+    @ResponseBody
+    public String findUserById(int id, String email) {
+        int rows = userService.updateEmail(id, email);
+        if (rows != 1) {
+            return FilmUtil.getJSONString(1);
+        }
+        return FilmUtil.getJSONString(0);
+    }
+
+    @RequestMapping("/admin/deleteUser/{id}")
+    @ResponseBody
+    public String deleteUserById(@PathVariable("id") int id) {
+        int rows = userService.deleteUserById(id);
+        if (rows != 1) {
+            return FilmUtil.getJSONString(1);
+        }
+        return FilmUtil.getJSONString(0);
+    }
+
+    @RequestMapping("/admin/searchUsers")
+    @ResponseBody
+    public List<User> searchUsers(String username, String email, Page page) {
+        if (username == "" && email == "") {
+            return userService.findUsers(page.getOffset(), page.getLimit());
+        }
+        if (username == "") username = null;
+        if (email == "") email = null;
+        List<User> users = userService.searchUsers(username, email, page.getOffset(), page.getLimit());
+        page.setRows(users.size());
+        page.setPath("/admin/searUsers?username="+username+"&email="+email);
+        for (User user : users) {
+            System.out.println(user);
+        }
+        return users;
     }
 }

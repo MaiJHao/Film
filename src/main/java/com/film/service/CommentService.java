@@ -58,4 +58,8 @@ public class CommentService {
     public List<Comment> findComments(int offset, int limit) {
         return commentMapper.selectComments(offset, limit);
     }
+
+    public int findCommentRows() {
+        return commentMapper.selectCommentCount();
+    }
 }

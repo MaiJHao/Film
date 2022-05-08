@@ -71,4 +71,8 @@ public class MovieService {
     public List<Movie> findNewMovie() {
         return movieMapper.selectNewMovie();
     }
+
+    public int deleteMovie(int id) {
+        return movieMapper.deleteMovieById(id);
+    }
 }

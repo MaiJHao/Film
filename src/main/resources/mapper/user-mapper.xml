@@ -14,7 +14,7 @@
     <select id="selectById" resultType="com.film.entity.User">
         select <include refid="selectFields"></include>
         from user
-        where id=#{id}
+        where id=#{id} and status!=0
     </select>
     
     <select id="selectByName" resultType="com.film.entity.User">
@@ -48,6 +48,35 @@
     <select id="selectUsers" resultType="com.film.entity.User">
         select <include refid="selectFields"></include>
         from user
+        limit #{offset},#{limit}
+    </select>
+
+    <update id="updateEmail">
+        update user set email=#{email}
+        where id=#{id}
+    </update>
+
+    <update id="updateStatus">
+        update user set status=0
+        where id=#{id}
+    </update>
+
+    <select id="selectUserCount" resultType="int">
+        select count(id)
+        from user
+    </select>
+
+    <select id="selectUserByIdAndEmail" resultType="com.film.entity.User">
+        select <include refid="selectFields"></include>
+        from user
+        <where>
+            <if test="username!=null">
+                username like "%" #{username} "%"
+            </if>
+            <if test="email!=null">
+                and email=#{email}
+            </if>
+        </where>
         limit #{offset},#{limit}
     </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.film.entity.Review;
 import com.film.entity.User;
 import com.film.service.MovieService;
 import com.film.service.ReviewService;
+import com.film.utils.FilmUtil;
 import com.film.utils.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
@@ -45,5 +48,15 @@ public class ReviewController {
         movieService.updateMovieRating(review.getMovieId(),  rating);
 
         return "redirect:/details/" + review.getMovieId();
+    }
+
+    @RequestMapping("/admin/deleteReview/{id}")
+    @ResponseBody
+    public String deleteUserById(@PathVariable("id") int id) {
+        int rows = reviewService.deleteReviewById(id);
+        if (rows != 1) {
+            return FilmUtil.getJSONString(1);
+        }
+        return FilmUtil.getJSONString(0);
     }
 }

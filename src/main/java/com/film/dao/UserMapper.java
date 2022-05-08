@@ -20,4 +20,12 @@ public interface UserMapper {
     int updatePassword(int id, String password);
 
     int updateHeaderUrl(int id, String headerUrl);
+
+    int updateEmail(int id, String email);
+
+    int updateStatus(int id);
+
+    int selectUserCount();
+
+    List<User> selectUserByIdAndEmail(String username, String email, int offset, int limit);
 }

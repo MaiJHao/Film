@@ -196,8 +196,8 @@ xblock{
 
 }
 
-/*µÇÂ¼ÑùÊ½*/
-/*Í·²¿*/
+/*ï¿½ï¿½Â¼ï¿½ï¿½Ê½*/
+/*Í·ï¿½ï¿½*/
 .container{
 	width: 100%;
 	height: 45px;
@@ -460,5 +460,9 @@ table th, table td {
 		width: 100%;
 		margin: 10px;
 	}
+}
+
+.disabled{
+	pointer-events:none;
 }
 

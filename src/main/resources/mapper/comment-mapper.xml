@@ -78,9 +78,16 @@
         and entity_type=#{entityType}
     </select>
 
+    <select id="selectCommentCount" resultType="int">
+        select count(id)
+        from comment
+    </select>
+
     <select id="selectComments" resultType="com.film.entity.Comment">
         select <include refid="selectFields"></include>
         from comment
         limit #{offset},#{limit}
     </select>
+
+
 </mapper>

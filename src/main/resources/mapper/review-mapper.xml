@@ -72,4 +72,9 @@
         from review
         where movie_id=#{movieId}
     </select>
+
+    <select id="selectReviewCount" resultType="int">
+        select count(id)
+        from review
+    </select>
 </mapper>

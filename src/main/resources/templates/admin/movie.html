@@ -23,7 +23,7 @@
         </form>
       </div>
       <xblock>       
-        <button class="layui-btn" onclick="x_admin_show('添加教师信息','#')"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('添加电影','/admin/addMovie')"><i class="layui-icon"></i>添加</button>
         <a href="">
         <span class="x-right" style="line-height:40px">
         <button class="layui-btn"><i class="layui-icon">&#xe65c;</i>返回</button>
@@ -66,7 +66,7 @@
               <a title="编辑"  onclick="stuInfo_edit('编辑','${adm.admin_id}')" href="javascript:;">
                 <i class="layui-icon">&#xe642;</i>
               </a>
-              <a title="删除" onclick="stuInfo_delete(this,'${adm.admin_id}')" href="javascript:;">
+              <a title="删除" th:onclick="|deleteMovie(${movie.id})|" href="javascript:;">
                 <i class="layui-icon">&#xe640;</i>
               </a>
             </td>
@@ -77,17 +77,20 @@
       </div>
       
       <!--page begin-->
-      <div class="am-cf">
-               共30 条记录, 每页  6条, 当前为  1 页
-     <div class="am-fr">
-     <ul class="am-pagination">
-      <li><a href="javascript:;" onclick="admin_getFirstPage(this,'${sessionScope.currentPage}')" >首页</a></li>
-      <li><a href="javascript:;" onclick="admin_getPriverPage('${sessionScope.dataCount}','${sessionScope.currentPage}')" >上一页</a></li>
-      <li><a href="javascript:;" onclick="admin_getNextPage('${sessionScope.dataCount}','${sessionScope.currentPage}')" >下一页</a></li>
-      <li><a href="javascript:;" onclick="admin_getLastPAge(this,'${sessionScope.dataCount}')" >尾页</a></li>
-      </ul>
-     </div>
-     </div>
+    <div th:replace="admin/user::pagination">
+        <div class="am-cf">
+            共30 条记录, 每页  6条, 当前为  1 页
+            <div class="am-fr">
+                <ul class="am-pagination">
+                    <li><a href="javascript:;" onclick="admin_getFirstPage(this,'${sessionScope.currentPage}')" >首页</a></li>
+                    <li><a href="javascript:;" onclick="admin_getPriverPage('${sessionScope.dataCount}','${sessionScope.currentPage}')" >上一页</a></li>
+                    <li><a href="javascript:;" onclick="admin_getNextPage('${sessionScope.dataCount}','${sessionScope.currentPage}')" >下一页</a></li>
+                    <li><a href="javascript:;" onclick="admin_getLastPAge(this,'${sessionScope.dataCount}')" >尾页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
      <!--page end  -->
  
  
@@ -195,8 +198,33 @@ function admin_getNextPage(dataCount,currentPage){
 function admin_getLastPAge(obj,dataCount){
     var laetPage= Math.ceil(dataCount/10);
     $("#adminsendOrder").attr("action","${pageContext.request.contextPath}/AdminServlet?action=showAdmData&currentPage="+laetPage).submit();  
-}    
-  
+}
+
+function deleteMovie(id) {
+    layui.use(['table','form','jquery'], function() {
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+
+        layer.confirm('确定删除？', {btn: ['确定','取消']}, function(){
+            //发送删除的请求
+            $.ajax({
+                url: CONTEXT_PATH + "/movie/admin/deleteMovie/" + id,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg('删除成功', {icon: 1}, {time: 10});
+                        setTimeout(function () { location.reload() }, 2000);
+                    } else {
+
+                    }
+                }
+            })
+        }, function(){
+            layer.msg('取消删除', {});
+        });
+    });
+}
 </script>
 	</body>
 </html>

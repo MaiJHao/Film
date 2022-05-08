@@ -23,4 +23,6 @@ public interface CommentMapper {
     int selectCommentCountByEntity(int entityType, int entityId);
 
     List<Comment> selectComments(int offset, int limit);
+
+    int selectCommentCount();
 }

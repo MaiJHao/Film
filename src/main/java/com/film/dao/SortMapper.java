@@ -18,4 +18,8 @@ public interface SortMapper {
     int insertSort(Sort sort);
 
     int updateNameById(int id, String name);
+
+    int deleteSortById(int id);
+
+    int selectSortCount();
 }

@@ -42,4 +42,14 @@
         from sort
         limit #{offset}, #{limit}
     </select>
+
+    <delete id="deleteSortById">
+        delete from sort
+        where id=#{id}
+    </delete>
+
+    <select id="selectSortCount" resultType="int">
+        select count(id)
+        from sort
+    </select>
 </mapper>

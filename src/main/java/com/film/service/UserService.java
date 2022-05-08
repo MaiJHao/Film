@@ -238,4 +238,57 @@ public class UserService implements FilmConstant {
         return userMapper.selectUsers(offset, limit);
     }
 
+    public Map<String, Object> addUser(User user){
+        Map<String, Object> map = new HashMap<>();
+        // 空值处理
+        if (StringUtils.isBlank(user.getUsername())) {
+            map.put("usernameMsg", "账号不能为空");
+            return map;
+        }
+        if (StringUtils.isBlank(user.getPassword())) {
+            map.put("passwordMsg", "密码不能为空");
+            return map;
+        }
+        if (StringUtils.isBlank(user.getEmail())) {
+            map.put("emailMsg", "邮箱不能为空");
+            return map;
+        }
+
+        User u = userMapper.selectByName(user.getUsername());
+        if (u != null) {
+            map.put("usernameMsg", "该账号已存在");
+            return map;
+        }
+        u = userMapper.selectByEmail(user.getEmail());
+        if (u != null) {
+            map.put("emailMsg", "该邮箱已被注册");
+            return map;
+        }
+
+        // 补全数据
+        user.setStatus(1);
+        user.setSalt(FilmUtil.generateUUID().substring(0, 5));
+        user.setPassword(FilmUtil.md5(user.getPassword() + user.getSalt()));
+        user.setCreateTime(new Date());
+
+        userMapper.insertUser(user);
+
+        return map;
+    }
+
+    public int updateEmail(int id, String email) {
+        return userMapper.updateEmail(id, email);
+    }
+
+    public int deleteUserById(int id) {
+        return userMapper.updateStatus(id);
+    }
+
+    public int findUserRows() {
+        return userMapper.selectUserCount();
+    }
+
+    public List<User> searchUsers(String username, String email, int offset, int limit) {
+        return userMapper.selectUserByIdAndEmail(username, email, offset, limit);
+    }
 }

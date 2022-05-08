@@ -40,6 +40,7 @@ public class HomeController implements FilmConstant {
     @Autowired
     private HostHolder hostHolder;
 
+    @LoginRequired
     @RequestMapping({"/index", "", "/"})
     public String index(Model model, Page page) {
         page.setRows(movieService.findMovieRows());

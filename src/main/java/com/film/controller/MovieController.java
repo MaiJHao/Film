@@ -86,4 +86,21 @@ public class MovieController {
             e.printStackTrace();
         }
     }
+
+    @RequestMapping("/admin/addMovie")
+    public String addMovie(Movie movie) {
+        int rows = movieService.addMovie(movie);
+        return "redirect:/admin/movie";
+    }
+
+    @RequestMapping("/admin/deleteMovie/{id}")
+    @ResponseBody
+    public String deleteUserById(@PathVariable("id") int id) {
+        int rows = movieService.deleteMovie(id);
+        if (rows != 1) {
+            return FilmUtil.getJSONString(1);
+        }
+        return FilmUtil.getJSONString(0);
+    }
+
 }

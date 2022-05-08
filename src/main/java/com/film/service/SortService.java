@@ -31,7 +31,7 @@ public class SortService {
         }
 
         Sort result = sortMapper.selectSortByName(sort.getName());
-        if (result.getName().equals(sort.getName())) {
+        if (result != null) {
             throw new IllegalArgumentException("该分类已存在");
         }
 
@@ -43,5 +43,13 @@ public class SortService {
 
     public List<Sort> findSortList(int offset,int limit) {
         return sortMapper.selectSortList(offset, limit);
+    }
+
+    public int deleteSort(int id) {
+        return sortMapper.deleteSortById(id);
+    }
+
+    public int findSortRows() {
+        return sortMapper.selectSortCount();
     }
 }

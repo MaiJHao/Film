@@ -26,4 +26,6 @@ public interface MovieMapper {
     List<Movie> selectMoviesBySort(int sortId, int offset, int limit);
 
     List<Movie> selectNewMovie();
+
+    int deleteMovieById(int id);
 }
