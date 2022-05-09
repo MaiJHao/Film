@@ -35,7 +35,7 @@ public class AdminHomeController {
         return "/admin/index";
     }
 
-    @RequestMapping("/user")
+    @RequestMapping("/getUserPage")
     public String getUserPage(Model model, Page page) {
         page.setPath("/admin/user");
         page.setRows(userService.findUserRows());

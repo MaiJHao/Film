@@ -19,7 +19,7 @@
         <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">      
           <input type="text" name="username" id="username" placeholder="输入查询用户名" autocomplete="off" class="layui-input">
           <input type="text" name="" id="email" placeholder="输入查询邮箱" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  onclick="searchUsers()"><i class="layui-icon">&#xe615;</i></button>
+          <button class="layui-btn" onclick="searchUsers()" type="button"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <xblock>       
@@ -43,8 +43,7 @@
             <th>状态</th>
             <th>操作</th>
         </thead>
-        <tbody>
-<!--        <c:forEach items="${sessionScope.showAdminList}" var="adm" varStatus="status">-->
+        <tbody id="userTableBody">
           <tr th:each="user:${userList}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
@@ -63,7 +62,7 @@
             <td class="td-manage">           
               <a onclick="stuInfo_stop(this,'${adm.admin_id}')" href="javascript:;"  title="启用">
                 <i class="layui-icon">&#xe601;</i>
-              </a>         
+              </a>
               <a title="编辑"  th:onclick="|editUser(${user.id})|" href="javascript:;">
                 <i class="layui-icon">&#xe642;</i>
               </a>
@@ -72,7 +71,6 @@
               </a>
             </td>
           </tr>
-<!--          </c:forEach>         -->
         </tbody>
       </table>
       </div>
@@ -291,7 +289,51 @@ function searchUsers() {
          },
          dataType: "json",
          success: function (data) {
-             alert(data);
+             $("#userTableBody").empty();
+             if(data) {
+                 for (let i=0;i<data.length;i++) {
+                     let user = data[i];
+                     let html = '<tr>\n' +
+                         '<td>\n' +
+                         '<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>\n' +
+                         '</td>\n' +
+                         '<td>#{username}</td>\n' +
+                         '<td contenteditable="true">\n' +
+                         '<span th:value="${user.email}" th:id="|tdEmail${user.id}|">#{email}</span>\n' +
+                         '</td>\n' +
+                         '<td>#{type}</td>\n' +
+                         '<td>#{createTime}</td>\n' +
+                         '\n' +
+                         '<td class="td-status">\n' +
+                         '<span class="layui-btn layui-btn-normal layui-btn-mini">正常</span>\n' +
+                         '</td\n' +
+                         '\n' +
+                         '  <a href="javascript:;"  title="启用">\n' +
+                         '    <i class="layui-icon">&#xe601;</i>\n' +
+                         '  </a>         \n' +
+                         '<td class="td-manage"\n' +
+                         '  <a href="javascript:;"  title="启用">\n' +
+                         '    <i class="layui-icon">&#xe601;</i>\n' +
+                         '  </a>         \n' +
+                         '  <a title="编辑"  onclick="editUser(#{id})" href="javascript:;">\n' +
+                         '    <i class="layui-icon">&#xe642;</i>\n' +
+                         '  </a>\n' +
+                         '  <a title="删除" onclick="deleteUser(#{id})" href="javascript:;">\n' +
+                         '    <i class="layui-icon">&#xe640;</i>\n' +
+                         '  </a>\n' +
+                         '</td>\n' +
+                         '</tr>';
+                     console.log("111");
+                     // html = html.replace(/#{CONTEXT_PATH}/g, CONTEXT_PATH);
+                     html = html.replace(/#{id}/g, user.id);
+                     html = html.replace(/#{username}/g, user.username);
+                     html = html.replace(/#{email}/g, user.email);
+                     html = html.replace(/#{type}/g, user.type);
+                     html = html.replace(/#{createTime}/g, user.createTime);
+                     html = html.replace(/#{id}/g, user.id);
+                     $("#userTableBody").append(html);
+                 }
+             }
          }
      })
 }
