@@ -28,4 +28,6 @@ public interface MovieMapper {
     List<Movie> selectNewMovie();
 
     int deleteMovieById(int id);
+
+    List<Movie> selectMovieByNameAndPlace(String name, String place, int offset, int limit);
 }

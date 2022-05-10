@@ -2,6 +2,7 @@ package com.film.controller;
 
 import com.film.annotation.LoginRequired;
 import com.film.entity.Comment;
+import com.film.entity.Page;
 import com.film.entity.Review;
 import com.film.entity.User;
 import com.film.service.CommentService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/comment")
@@ -55,5 +57,16 @@ public class CommentController implements FilmConstant {
             return FilmUtil.getJSONString(1);
         }
         return FilmUtil.getJSONString(0);
+    }
+
+    @RequestMapping("/admin/searchComments")
+    @ResponseBody
+    public List<Comment> searchComments(String username, String content, Page page) {
+        if (username == "") username = null;
+        if (content == "") content = null;
+        List<Comment> comments = commentService.searchComments(username, content, page.getOffset(), page.getLimit());
+        page.setRows(comments.size());
+        page.setPath("/admin/searchComments?username="+username+"&content="+content);
+        return comments;
     }
 }

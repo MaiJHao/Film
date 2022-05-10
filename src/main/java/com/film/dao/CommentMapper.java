@@ -25,4 +25,6 @@ public interface CommentMapper {
     List<Comment> selectComments(int offset, int limit);
 
     int selectCommentCount();
+
+    List<Comment> selectCommentByUserIdAndContent(int userId, String content, int offset, int limit);
 }

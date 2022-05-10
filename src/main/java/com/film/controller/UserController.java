@@ -375,10 +375,7 @@ public class UserController implements FilmConstant {
         if (email == "") email = null;
         List<User> users = userService.searchUsers(username, email, page.getOffset(), page.getLimit());
         page.setRows(users.size());
-        page.setPath("/admin/searUsers?username="+username+"&email="+email);
-        for (User user : users) {
-            System.out.println(user);
-        }
+        page.setPath("/admin/searchUsers?username="+username+"&email="+email);
         return users;
     }
 }

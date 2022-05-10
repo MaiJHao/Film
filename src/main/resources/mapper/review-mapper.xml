@@ -77,4 +77,18 @@
         select count(id)
         from review
     </select>
+
+    <select id="selectReviewByTitleAndContent" resultType="com.film.entity.Review">
+        select <include refid="selectFields"></include>
+        from review
+        <where>
+            <if test="title!=null">
+                title like "%" #{title} "%"
+            </if>
+            <if test="content!=null">
+                content like "%" #{content} "%"
+            </if>
+        </where>
+        limit #{offset}, #{limit}
+    </select>
 </mapper>

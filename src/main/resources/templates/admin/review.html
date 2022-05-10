@@ -17,9 +17,9 @@
 	<div class="x-body">
       <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">      
-          <input type="text" name="username" id="username" placeholder="输入查询用户名" autocomplete="off" class="layui-input">
-          <input type="text" name="" id="email" placeholder="输入查询邮箱" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  onclick="searchByInfo()"><i class="layui-icon">&#xe615;</i></button>
+          <input type="text" name="title" id="title" placeholder="输入查询标题" autocomplete="off" class="layui-input">
+          <input type="text" name="content" id="content" placeholder="输入查询内容" autocomplete="off" class="layui-input">
+          <button class="layui-btn" type="button" onclick="searchReviews()"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <table class="layui-table">
@@ -35,8 +35,7 @@
             <th>发表时间</th>
             <th>操作</th>
         </thead>
-        <tbody>
-<!--        <c:forEach items="${sessionScope.showAdminList}" var="adm" varStatus="status">-->
+        <tbody id="reviewTableBody">
           <tr th:each="review:${reviewList}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
@@ -59,7 +58,6 @@
               </a>
             </td>
           </tr>
-<!--          </c:forEach>         -->
         </tbody>
       </table>
       </div>
@@ -211,6 +209,56 @@ function deleteReview(id) {
             layer.msg('取消删除', {});
         });
     });
+}
+
+function searchReviews() {
+    let title = $("#title").val();
+    let content = $("#content").val();
+    $.ajax({
+        url: CONTEXT_PATH + "/review/admin/searchReviews",
+        data: {
+            "title": title,
+            "content": content
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#reviewTableBody").empty();
+            if(data) {
+                for (let i=0;i<data.length;i++) {
+                    let review = data[i];
+                    let html = '<tr th:each="review:${reviewList}">\n' +
+                        '<td>\n' +
+                        '<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id=\'2\'><i class="layui-icon">&#xe605;</i></div>\n' +
+                        '</td>\n' +
+                        '<td>#{userId}</td>\n' +
+                        '<td>#{movieId}</td>\n' +
+                        '<td>#{title}\n' +
+                        '<td>#{content}</td>\n' +
+                        '<td>#{createTime}</td>\n' +
+                        '\n' +
+                        '<td class="td-manage">\n' +
+                        '  <a onclick="stuInfo_stop(this,\'${adm.admin_id}\')" href="javascript:;"  title="启用">\n' +
+                        '    <i class="layui-icon">&#xe601;</i>\n' +
+                        '  </a>         \n' +
+                        '  <a title="编辑"  onclick="stuInfo_edit(\'编辑\',\'${adm.admin_id}\')" href="javascript:;">\n' +
+                        '    <i class="layui-icon">&#xe642;</i>\n' +
+                        '  </a>\n' +
+                        '  <a title="删除" onclick="deleteReview(#{id}})" href="javascript:;">\n' +
+                        '    <i class="layui-icon">&#xe640;</i>\n' +
+                        '  </a>\n' +
+                        '</td>\n' +
+                        '</tr>';
+                    html = html.replace(/#{userId}/g, review.userId);
+                    html = html.replace(/#{movieId}/g, review.movieId);
+                    html = html.replace(/#{title}/g, review.title);
+                    html = html.replace(/#{content}/g, review.content);
+                    html = html.replace(/#{createTime}/g, review.createTime);
+                    html = html.replace(/#{id}/g, review.id);
+                    $("#reviewTableBody").append(html);
+                }
+            }
+        }
+    })
 }
   
 </script>

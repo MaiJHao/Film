@@ -52,4 +52,15 @@
         select count(id)
         from sort
     </select>
+
+    <select id="selectSortsByName" resultType="com.film.entity.Sort">
+        select <include refid="selectFields"></include>
+        from sort
+        <where>
+            <if test="name!=null">
+                name like "%" #{name} "%"
+            </if>
+        </where>
+        limit #{offset}, #{limit}
+    </select>
 </mapper>

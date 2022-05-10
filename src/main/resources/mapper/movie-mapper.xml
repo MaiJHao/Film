@@ -99,4 +99,18 @@
     <delete id="deleteMovieById">
         delete from movie where id=#{id}
     </delete>
+
+    <select id="selectMovieByNameAndPlace" resultType="com.film.entity.Movie">
+        select <include refid="selectFields"></include>
+        from movie
+        <where>
+            <if test="name!=null">
+                name like "%" #{name} "%"
+            </if>
+            <if test="place!=null">
+                and place=#{place}
+            </if>
+        </where>
+        limit #{offset},#{limit}
+    </select>
 </mapper>

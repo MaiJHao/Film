@@ -75,4 +75,8 @@ public class MovieService {
     public int deleteMovie(int id) {
         return movieMapper.deleteMovieById(id);
     }
+
+    public List<Movie> searchMovies(String name, String place, int offset, int limit) {
+        return movieMapper.selectMovieByNameAndPlace(name, place, offset, limit);
+    }
 }

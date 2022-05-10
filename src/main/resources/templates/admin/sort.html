@@ -17,9 +17,8 @@
 	<div class="x-body">
       <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">      
-          <input type="text" name="username" id="username" placeholder="输入查询用户名" autocomplete="off" class="layui-input">
-          <input type="text" name="" id="email" placeholder="输入查询邮箱" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  onclick="searchByInfo()"><i class="layui-icon">&#xe615;</i></button>
+          <input type="text" name="name" id="name" placeholder="输入查询分类名" autocomplete="off" class="layui-input">
+          <button class="layui-btn" type="button" onclick="searchSorts()"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <xblock>       
@@ -39,8 +38,7 @@
             <th>分类名</th>
             <th>操作</th>
         </thead>
-        <tbody>
-<!--        <c:forEach items="${sessionScope.showAdminList}" var="adm" varStatus="status">-->
+        <tbody id="sortTableBody">
           <tr th:each="sort:${sortList}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
@@ -59,7 +57,6 @@
               </a>
             </td>
           </tr>
-<!--          </c:forEach>         -->
         </tbody>
       </table>
       </div>
@@ -211,6 +208,47 @@ function deleteSort(id) {
             layer.msg('取消删除', {});
         });
     });
+}
+
+function searchSorts() {
+    let name = $("#name").val();
+    $.ajax({
+        url: CONTEXT_PATH + "/sort/admin/searchSorts",
+        data: {
+            "name": name
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#sortTableBody").empty();
+            if(data) {
+                for (let i=0;i<data.length;i++) {
+                    let sort = data[i];
+                    let html = '<tr>\n' +
+                        '<td>\n' +
+                        '  <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id=\'2\'><i class="layui-icon">&#xe605;</i></div>\n' +
+                        '</td>\n' +
+                        '<td>#{name}</td>\n' +
+                        '       \n' +
+                        '<td class="td-manage">           \n' +
+                        '  <a onclick="stuInfo_stop(this,\'${adm.admin_id}\')" href="javascript:;"  title="启用">\n' +
+                        '    <i class="layui-icon">&#xe601;</i>\n' +
+                        '  </a>         \n' +
+                        '  <a title="编辑"  onclick="stuInfo_edit(\'编辑\',\'${adm.admin_id}\')" href="javascript:;">\n' +
+                        '    <i class="layui-icon">&#xe642;</i>\n' +
+                        '  </a>\n' +
+                        '  <a title="删除" onclick="deleteSort(#{id})" href="javascript:;">\n' +
+                        '    <i class="layui-icon">&#xe640;</i>\n' +
+                        '  </a>\n' +
+                        '</td>\n' +
+                        '</tr>';
+                    console.log(sort.name);
+                    html = html.replace(/#{name}/g, sort.name);
+                    html = html.replace(/#{id}/g, sort.id);
+                    $("#sortTableBody").append(html);
+                }
+            }
+        }
+    })
 }
   
 </script>

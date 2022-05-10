@@ -22,4 +22,6 @@ public interface SortMapper {
     int deleteSortById(int id);
 
     int selectSortCount();
+
+    List<Sort> selectSortsByName(String name, int offset, int limit);
 }

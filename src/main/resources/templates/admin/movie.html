@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8">
-		<title>用户用户管理</title>
+		<title>电影管理</title>
 		<link rel="stylesheet" th:href="@{/admin/css/font.css}">
 	    <link rel="stylesheet" th:href="@{/admin/css/xadmin.css}">
 	    <link rel="stylesheet" th:href="@{/admin/layui/css/layui.css}" media="all">
@@ -17,9 +17,9 @@
 	<div class="x-body">
       <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">      
-          <input type="text" name="username" id="username" placeholder="输入查询用户名" autocomplete="off" class="layui-input">
-          <input type="text" name="" id="email" placeholder="输入查询邮箱" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  onclick="searchByInfo()"><i class="layui-icon">&#xe615;</i></button>
+          <input type="text" name="name" id="name" placeholder="输入查询电影名称" autocomplete="off" class="layui-input">
+          <input type="text" name="place" id="place" placeholder="输入查询产地" autocomplete="off" class="layui-input">
+          <button class="layui-btn" type="button" onclick="searchMovies()"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <xblock>       
@@ -43,8 +43,7 @@
             <th>上次修改时间</th>
             <th>操作</th>
         </thead>
-        <tbody>
-<!--        <c:forEach items="${sessionScope.showAdminList}" var="adm" varStatus="status">-->
+        <tbody id="movieTableBody">
           <tr th:each="movie:${movies}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
@@ -71,7 +70,6 @@
               </a>
             </td>
           </tr>
-<!--          </c:forEach>         -->
         </tbody>
       </table>
       </div>
@@ -224,6 +222,55 @@ function deleteMovie(id) {
             layer.msg('取消删除', {});
         });
     });
+}
+
+function searchMovies() {
+    let name = $("#name").val();
+    let place = $("#place").val();
+    $.ajax({
+        url: CONTEXT_PATH + "/movie/admin/searchMovies",
+        data: {
+            "name": name,
+            "place": place
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#movieTableBody").empty();
+            if(data) {
+                for (let i=0;i<data.length;i++) {
+                    let movie = data[i];
+                    let html = '<tr>\n' +
+                        '<td>\n' +
+                        '<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id=\'2\'><i class="layui-icon">&#xe605;</i></div>\n' +
+                        '</td>\n' +
+                        '<td>#{name}</td>\n' +
+                        '<td>#{sortId}</td>\n' +
+                        '<td>#{releaseTime}</td>\n' +
+                        '<td>#{rating}</td>\n' +
+                        '<td>#{editTime}</td>\n' +
+                        '<td class="td-manage">\n' +
+                        '<a onclick="stuInfo_stop(this,\'${adm.admin_id}\')" href="javascript:;"  title="启用">\n' +
+                        '<i class="layui-icon">&#xe601;</i>\n' +
+                        '</a>\n' +
+                        '<a title="编辑"  onclick="stuInfo_edit(\'编辑\',\'${adm.admin_id}\')" href="javascript:;">\n' +
+                        '<i class="layui-icon">&#xe642;</i>\n' +
+                        '</a>\n' +
+                        '<a title="删除" onclick="deleteMovie(#{id})" href="javascript:;">\n' +
+                        '<i class="layui-icon">&#xe640;</i>\n' +
+                        '</a>\n' +
+                        '</td>\n' +
+                        '</tr>';
+                    html = html.replace(/#{name}/g, movie.id);
+                    html = html.replace(/#{sortId}/g, movie.name);
+                    html = html.replace(/#{releaseTime}/g, movie.releaseTime);
+                    html = html.replace(/#{rating}/g, movie.rating);
+                    html = html.replace(/#{editTime}/g, movie.editTime);
+                    html = html.replace(/#{id}/g, movie.id);
+                    $("#movieTableBody").append(html);
+                }
+            }
+        }
+    })
 }
 </script>
 	</body>

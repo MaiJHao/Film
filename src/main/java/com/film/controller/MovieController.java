@@ -3,6 +3,7 @@ package com.film.controller;
 import com.film.entity.Movie;
 import com.film.entity.Page;
 import com.film.entity.Sort;
+import com.film.entity.User;
 import com.film.service.MovieService;
 import com.film.service.SortService;
 import com.film.utils.FilmUtil;
@@ -101,6 +102,17 @@ public class MovieController {
             return FilmUtil.getJSONString(1);
         }
         return FilmUtil.getJSONString(0);
+    }
+
+    @RequestMapping("/admin/searchMovies")
+    @ResponseBody
+    public List<Movie> searchMovies(String name, String place, Page page) {
+        if (name == "") name = null;
+        if (place == "") place = null;
+        List<Movie> movies = movieService.searchMovies(name, place, page.getOffset(), page.getLimit());
+        page.setRows(movies.size());
+        page.setPath("/admin/searchMovies?name="+name+"&place="+place);
+        return movies;
     }
 
 }

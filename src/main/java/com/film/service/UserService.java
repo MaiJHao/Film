@@ -291,4 +291,8 @@ public class UserService implements FilmConstant {
     public List<User> searchUsers(String username, String email, int offset, int limit) {
         return userMapper.selectUserByIdAndEmail(username, email, offset, limit);
     }
+
+    public User findUserByUsername(String username) {
+        return userMapper.selectByName(username);
+    }
 }

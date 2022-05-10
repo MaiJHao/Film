@@ -1,7 +1,10 @@
 package com.film.service;
 
+import com.film.controller.UserController;
 import com.film.dao.CommentMapper;
 import com.film.entity.Comment;
+import com.film.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,9 @@ public class CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private UserService userService;
 
     public List<Comment> findCommentsByEntity(int entityType, int entityId, int offset, int limit) {
         return commentMapper.selectCommentsByEntity(entityType, entityId, offset, limit);
@@ -61,5 +67,14 @@ public class CommentService {
 
     public int findCommentRows() {
         return commentMapper.selectCommentCount();
+    }
+
+    public List<Comment> searchComments(String username, String content, int offset, int limit) {
+        User user = new User();
+        if (!StringUtils.isBlank(username)){
+            user = userService.findUserByUsername(username);
+            return commentMapper.selectCommentByUserIdAndContent(user.getId(), content, offset, limit);
+        }
+        return commentMapper.selectCommentByUserIdAndContent(0, content, offset, limit);
     }
 }

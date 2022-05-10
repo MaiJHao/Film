@@ -29,4 +29,6 @@ public interface ReviewMapper {
     int selectCommentCountByMovieId(int movieId);
 
     int selectReviewCount();
+
+    List<Review> selectReviewByTitleAndContent(String title, String content, int offset, int limit);
 }

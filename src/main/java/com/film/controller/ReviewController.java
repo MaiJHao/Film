@@ -1,6 +1,7 @@
 package com.film.controller;
 
 import com.film.annotation.LoginRequired;
+import com.film.entity.Page;
 import com.film.entity.Review;
 import com.film.entity.User;
 import com.film.service.MovieService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/review")
@@ -58,5 +60,16 @@ public class ReviewController {
             return FilmUtil.getJSONString(1);
         }
         return FilmUtil.getJSONString(0);
+    }
+
+    @RequestMapping("/admin/searchReviews")
+    @ResponseBody
+    public List<Review> searchReviews(String title, String content, Page page) {
+        if (title == "") title = null;
+        if (content == "") content = null;
+        List<Review> reviews = reviewService.searchReviews(title, content, page.getOffset(), page.getLimit());
+        page.setRows(reviews.size());
+        page.setPath("/admin/searchReviews?title="+title+"&content="+content);
+        return reviews;
     }
 }

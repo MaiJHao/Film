@@ -18,8 +18,8 @@
       <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" action="" id="searchByInfo"  method="post">      
           <input type="text" name="username" id="username" placeholder="输入查询用户名" autocomplete="off" class="layui-input">
-          <input type="text" name="" id="email" placeholder="输入查询邮箱" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  onclick="searchByInfo()"><i class="layui-icon">&#xe615;</i></button>
+          <input type="text" name="" id="content" placeholder="输入查询内容" autocomplete="off" class="layui-input">
+          <button class="layui-btn" type="button" onclick="searchComments()"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <table class="layui-table">
@@ -34,8 +34,7 @@
             <th>发表时间</th>
             <th>操作</th>
         </thead>
-        <tbody>
-<!--        <c:forEach items="${sessionScope.showAdminList}" var="adm" varStatus="status">-->
+        <tbody id="commentTableBody">
           <tr th:each="comment:${commentList}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
@@ -57,7 +56,6 @@
               </a>
             </td>
           </tr>
-<!--          </c:forEach>         -->
         </tbody>
       </table>
       </div>
@@ -209,6 +207,54 @@ function deleteComment(id) {
             layer.msg('取消删除', {});
         });
     });
+}
+
+function searchComments() {
+    let username = $("#username").val();
+    let content = $("#content").val();
+    $.ajax({
+        url: CONTEXT_PATH + "/comment/admin/searchComments",
+        data: {
+            "username": username,
+            "content": content
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#commentTableBody").empty();
+            if(data) {
+                for (let i=0;i<data.length;i++) {
+                    let comment = data[i];
+                    let html = '<tr>\n' +
+                        '<td>\n' +
+                        '  <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id=\'2\'><i class="layui-icon">&#xe605;</i></div>\n' +
+                        '</td>\n' +
+                        '<td>#{userId}</td>\n' +
+                        '<td>#{entityId}</td>\n' +
+                        '<td>#{content}</td>\n' +
+                        '<td>#{createTime}</td>\n' +
+                        '       \n' +
+                        '<td class="td-manage">           \n' +
+                        '  <a onclick="stuInfo_stop(this,\'${adm.admin_id}\')" href="javascript:;"  title="启用">\n' +
+                        '    <i class="layui-icon">&#xe601;</i>\n' +
+                        '  </a>         \n' +
+                        '  <a title="编辑"  onclick="stuInfo_edit(\'编辑\',\'${adm.admin_id}\')" href="javascript:;">\n' +
+                        '    <i class="layui-icon">&#xe642;</i>\n' +
+                        '  </a>\n' +
+                        '  <a title="删除" onclick="deleteComment(#{id})" href="javascript:;">\n' +
+                        '    <i class="layui-icon">&#xe640;</i>\n' +
+                        '  </a>\n' +
+                        '</td>\n' +
+                        '</tr>';
+                    html = html.replace(/#{userId}/g, comment.entityId);
+                    html = html.replace(/#{entityId}/g, comment.entityId);
+                    html = html.replace(/#{content}/g, comment.content);
+                    html = html.replace(/#{createTime}/g, comment.createTime);
+                    html = html.replace(/#{id}/g, comment.id);
+                    $("#commentTableBody").append(html);
+                }
+            }
+        }
+    })
 }
   
 </script>

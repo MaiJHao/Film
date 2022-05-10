@@ -69,4 +69,8 @@ public class ReviewService {
     public int findReviewRows() {
         return reviewMapper.selectReviewCount();
     }
+
+    public List<Review> searchReviews(String title, String content, int offset, int limit) {
+        return reviewMapper.selectReviewByTitleAndContent(title, content, offset, limit);
+    }
 }

@@ -89,5 +89,18 @@
         limit #{offset},#{limit}
     </select>
 
+    <select id="selectCommentByUserIdAndContent" resultType="com.film.entity.Comment">
+        select <include refid="selectFields"></include>
+        from comment
+        <where>
+            <if test="userId!=0">
+                userId=#{userId}
+            </if>
+            <if test="content!=null">
+                content like "%" #{content} "%"
+            </if>
+        </where>
+        limit #{offset}, #{limit}
+    </select>
 
 </mapper>

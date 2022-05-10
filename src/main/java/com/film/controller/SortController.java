@@ -1,6 +1,8 @@
 package com.film.controller;
 
+import com.film.entity.Page;
 import com.film.entity.Sort;
+import com.film.entity.User;
 import com.film.service.SortService;
 import com.film.utils.FilmUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,16 @@ public class SortController {
             return FilmUtil.getJSONString(1);
         }
         return FilmUtil.getJSONString(0);
+    }
+
+    @RequestMapping("/admin/searchSorts")
+    @ResponseBody
+    public List<Sort> searchSorts(String name, Page page) {
+        if (name == "") name = null;
+        List<Sort> sorts = sortService.searchSorts(name, page.getOffset(), page.getLimit());
+        page.setRows(sorts.size());
+        page.setPath("/admin/searchSorts?name="+name);
+        return sorts;
     }
 
 }

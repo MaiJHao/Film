@@ -52,4 +52,8 @@ public class SortService {
     public int findSortRows() {
         return sortMapper.selectSortCount();
     }
+
+    public List<Sort> searchSorts(String name, int offset, int limit) {
+        return sortMapper.selectSortsByName(name, offset, limit);
+    }
 }
