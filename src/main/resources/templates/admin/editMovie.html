@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+
+        <link rel="stylesheet" th:href="@{/admin/layui/css/layui.css}">
+        <script th:src="@{/admin/layui/layui.js}"></script>
+        <script th:src="@{/admin/scripts/jquery.min.js}"></script>
+        
+		<title>用户添加</title>
+		<style>
+            body{padding: 10px;}
+        </style>
+	</head>
+	
+	<body>
+   <form class="layui-form layui-form-pane1" id ="subform" method="post">
+  <div class="layui-form-item">
+    <label class="layui-form-label">电影名称</label>
+    <div class="layui-input-block">
+      <input th:value="${movie.name}" type="text" id="name" name="username" lay-verify="required|title" required placeholder="请输入用户名" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">产地</label>
+    <div class="layui-input-block">
+      <input th:value="${movie.place}" id="place" lay-verify="required" required placeholder="请输入产地" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+       <div class="layui-form-item">
+    <label class="layui-form-label">简介</label>
+    <div class="layui-input-block">
+      <input th:value="${movie.introduce}" id="introduce"  lay-verify="required" required placeholder="请输入简介" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">分类</label>
+    <div class="layui-input-block">
+      <select id="sortId" name="type" lay-filter="adminRole">
+          <option value="">请选择权限</option>
+          <option th:each="sort:${sortList}" th:text="${sort.name}" th:value="${sort.id}" th:selected="${movie.sortId==sort.id?'true':'false'}">请选择权限</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" type="button" th:onclick="|editMovie(${movie.id})|">修改</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+
+<br><br><br>
+
+<script>
+
+    function editMovie(id) {
+        console.log(1212)
+        layui.use(['table','form','jquery'], function() {
+            var table = layui.table;
+            var form = layui.form;
+            var $ = layui.jquery;
+
+            layer.confirm('确认修改？', {
+                btn: ['确定', '取消'] //可以无限个按钮
+                ,
+                btn2: function(index, layero) {
+                    //按钮【按钮二】的回调
+                }
+            }, function(index, layero) {
+                console.log(1213)
+                $.ajax({
+                    url: "/film/movie/admin/updateMovie",
+                    data: {
+                        "id": id,
+                        "place" : $("#place").val(),
+                        "introduce": $("#introduce").val(),
+                        "sortId": $("#sortId").val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 0) {
+                            alert("修改成功");
+                        }
+                    }
+                })
+                layer.close(index);
+            }, function(index) {
+                //按钮【按钮二】的回调
+            });
+        });
+    }
+
+//加载layui信息
+layui.use('form', function(){
+  var form = layui.form;
+  //layui日期选择
+  layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#createTime', //指定元素
+          value: new Date()
+        });
+    });
+
+
+  //监听提交
+  form.on('submit(*)', function(data){
+      /*$.ajax({
+          url: "/film/user/admin/addUser",
+          type: "post",
+          data: {
+              "username": $("#username").val(),
+              "password": $("#password").val(),
+              "email": $("#email").val(),
+              "type": $("#type").val()
+          },
+          dataType: "json",
+          success: function (data) {
+              if (data.code == 0) {
+                  alert(12);
+
+              } else if(data.map){
+                  alert(data.map)
+              } else {
+
+              }
+          }
+      })*/
+      var subform= $(parent.document.body).children("div[id='mianFromDiv']").append($("#subform"));
+      //获取窗口索引,关闭弹窗
+      var index=parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index)
+
+    //发送请求
+	$("#subform").submit();
+  });
+
+});
+
+</script>
+
+</body>
+</html>
