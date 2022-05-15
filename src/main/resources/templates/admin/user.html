@@ -226,7 +226,7 @@ function editUser(id) {
                 url: CONTEXT_PATH + "/user/admin/updateUser/",
                 data: {
                     "id": id,
-                    "email" : $("#tdEmail"+id).text()
+                    "email" : $("#tdEmail"+id).val()
                 },
                 dataType: "json",
                 success: function (data) {
@@ -299,7 +299,7 @@ function searchUsers() {
                          '</td>\n' +
                          '<td>#{username}</td>\n' +
                          '<td contenteditable="true">\n' +
-                         '<span th:value="${user.email}" th:id="|tdEmail${user.id}|">#{email}</span>\n' +
+                         '<span id="tdEmail'+ user.id +'">#{email}</span>\n' +
                          '</td>\n' +
                          '<td>#{type}</td>\n' +
                          '<td>#{createTime}</td>\n' +

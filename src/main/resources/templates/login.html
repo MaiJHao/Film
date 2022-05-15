@@ -38,7 +38,7 @@
 							</a>
 
 							<div class="sign__group">
-								<input type="text" th:class="|sign__input ${usernameMsg!=null?'is-invalid':''}|" placeholder="用户名" name="username" required>
+								<input type="text" th:class="|sign__input ${usernameMsg!=null?'is-invalid':''}|" placeholder="用户名" name="username">
 								<div class="invalid-feedback" th:text="${usernameMsg}" style="color: red">
 									账号提示
 								</div>

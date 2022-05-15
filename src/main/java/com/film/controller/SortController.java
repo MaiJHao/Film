@@ -1,5 +1,6 @@
 package com.film.controller;
 
+import com.film.entity.Movie;
 import com.film.entity.Page;
 import com.film.entity.Sort;
 import com.film.entity.User;
@@ -51,6 +52,16 @@ public class SortController {
         page.setRows(sorts.size());
         page.setPath("/admin/searchSorts?name="+name);
         return sorts;
+    }
+
+    @RequestMapping("/admin/updateSort")
+    @ResponseBody
+    public String updateSortById(Sort sort) {
+        int rows = sortService.updateSort(sort);
+        if (rows != 1) {
+            return FilmUtil.getJSONString(1);
+        }
+        return FilmUtil.getJSONString(0);
     }
 
 }

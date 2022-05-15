@@ -1,0 +1,61 @@
+<%--
+Created by IntelliJ IDEA.
+User: 23532
+Date: 2021/10/1
+Time: 16:47
+To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
+<html>
+<head>
+    <base href="<%=basePath%>">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>拖拽上传</legend>
+</fieldset>
+
+<div class="layui-upload-drag" id="test10">
+    <i class="layui-icon"></i>
+    <p>点击上传，或将文件拖拽到此处</p>
+    <div class="layui-hide" id="uploadDemoView">
+        <hr>
+        <img src="" alt="上传成功后渲染" style="max-width: 196px">
+    </div>
+</div>
+</body>
+
+<script>
+    layui.use(['upload', 'element', 'layer'], function(){
+        var $ = layui.jquery
+            ,upload = layui.upload
+            ,element = layui.element
+            ,layer = layui.layer;
+
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,url: 'upload.do' //改成您自己的上传接口
+            ,accept: 'file' //接受的文件类型
+            ,size: 2097152 //上传文件大小不超过2G
+            ,multiple: true //允许多文件上传
+            ,done: function(res){
+                if(res.code=="200"){
+                    layer.msg('上传成功',{icon:1});
+                }else{
+                    layer.msg('上传失败',{icon:2});
+                }
+
+                console.log(res)
+            }
+        });
+    });
+</script>
+</html>

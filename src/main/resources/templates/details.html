@@ -165,20 +165,21 @@
 
 					<!-- video player -->
 					<div class="col-12 col-xl-8">
-						<video controls crossorigin playsinline poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" id="player">
-							<!-- Video files -->
-							<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" type="video/mp4" size="576">
-							<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" type="video/mp4" size="720">
-							<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" type="video/mp4" size="1080">
+						<!--<video controls crossorigin playsinline poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" id="player">
+							&lt;!&ndash; Video files &ndash;&gt;
+							<source th:src="@{${movie.playAddress}}" type="video/mp4" size="576">
+							<source th:src="@{${movie.playAddress}}" type="video/mp4" size="720">
+							<source th:src="@{${movie.playAddress}}" type="video/mp4" size="1080">
 
-							<!-- Caption files -->
+							&lt;!&ndash; Caption files &ndash;&gt;
 							<track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
 							    default>
 							<track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
 
-							<!-- Fallback for browsers that don't support the <video> element -->
+							&lt;!&ndash; Fallback for browsers that don't support the <video> element &ndash;&gt;
 							<a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
-						</video>
+						</video>-->
+						<video style="object-fit: contain" width="720" height="480"  controls crossorigin playsinline th:src="@{${movie.playAddress}}"></video>
 					</div>
 					<!-- end video player -->
 

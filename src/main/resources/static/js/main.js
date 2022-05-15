@@ -1,5 +1,3 @@
-var CONTEXT_PATH = "/film";
-
 $(document).ready(function () {
 	"use strict"; // start of use strict
 

@@ -79,4 +79,21 @@
         </where>
         limit #{offset},#{limit}
     </select>
+
+    <update id="updateUserById">
+        update user
+        <set>
+            <if test="username!='' || username!=null">
+                username=#{username},
+            </if>
+            <if test="email!='' || email!=null">
+                email=#{email},
+            </if>
+            <if test="type!=0">
+                type=#{type}
+            </if>
+        </set>
+        where id=#{id}
+
+    </update>
 </mapper>

@@ -6,7 +6,9 @@ import com.film.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -46,7 +48,14 @@ public class AdminHomeController {
         page.setPath("/admin/user");
 
         model.addAttribute("userList", userList);
-        return "/admin/user";
+        return "/admin/user1";
+    }
+
+    @RequestMapping("/getEditUserPage/{id}")
+    public String getEditUserPage(@PathVariable("id") int id, Model model) {
+        User user = userService.findUserById(id);
+        model.addAttribute("user", user);
+        return "/admin/editUser";
     }
 
     @RequestMapping("/movie")
@@ -58,6 +67,16 @@ public class AdminHomeController {
         model.addAttribute("movies", movies);
 
         return "/admin/movie";
+    }
+
+    @RequestMapping("/getEditMoviePage/{id}")
+    public String getEditMoviePage(@PathVariable("id") int id, Model model) {
+        Movie movie = movieService.findMovieById(id);
+        model.addAttribute("movie", movie);
+        List<Sort> sortList = sortService.findSorts();
+        model.addAttribute("sortList", sortList);
+
+        return "/admin/editMovie";
     }
 
     @RequestMapping("/comment")
@@ -91,6 +110,13 @@ public class AdminHomeController {
         model.addAttribute("sortList", sortList);
 
         return "/admin/sort";
+    }
+
+    @RequestMapping("/getEditSortPage/{id}")
+    public String getEditSortPage(@PathVariable("id") int id, Model model) {
+        Sort sort = sortService.findSortById(id);
+        model.addAttribute("sort", sort);
+        return "/admin/editSort";
     }
 
     @RequestMapping("/mainfunction")

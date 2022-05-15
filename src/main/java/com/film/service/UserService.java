@@ -295,4 +295,8 @@ public class UserService implements FilmConstant {
     public User findUserByUsername(String username) {
         return userMapper.selectByName(username);
     }
+
+    public int updateUserById(int id, String username, String email, int type) {
+        return userMapper.updateUserById(id, username, email, type);
+    }
 }

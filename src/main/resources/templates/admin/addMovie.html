@@ -13,6 +13,11 @@
     <script th:src="@{/admin/layui/layui.js}"></script>
     <script th:src="@{/admin/scripts/jquery.min.js}"></script>
 
+    <link rel="stylesheet" th:href="@{/admin/css/font.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/xadmin.css}">
+    <link rel="stylesheet" th:href="@{/admin/layui/css/layui.css}" media="all">
+    <script type="text/javascript" th:src="@{/admin/layui/layui.js}" charset="utf-8"></script>
+
     <title>用户添加</title>
     <style>
         body {
@@ -52,6 +57,7 @@
     </div>
 
     <div class="layui-form-item">
+        <input hidden="hidden" name="poster" id="poster">
         <label class="layui-form-label">海报</label>
         <div class="grid-demo grid-demo-bg1">
             <div class="layui-upload-drag" id="uploadPoster">
@@ -74,6 +80,7 @@
     </div>
 
     <div class="layui-form-item">
+        <input hidden="hidden" name="playAddress" id="playAddress">
         <label class="layui-form-label">上传电影资源</label>
         <div class="grid-demo grid-demo-bg1">
             <div class="layui-upload-drag" id="uploadMovie">
@@ -99,8 +106,45 @@
 
 <script>
     //加载layui信息
-    layui.use('form', function () {
-        var form = layui.form;
+    layui.use(['form', 'upload'], function () {
+        var form = layui.form,
+            upload = layui.upload;
+
+        //拖拽上传
+        upload.render({
+            elem: '#uploadMovie'
+            ,accept: 'video' //普通文件
+            ,url: '/film/movie/admin/uploadMovie' //改成您自己的上传接口
+            ,done: function(res){
+                if (res.code == "0"){
+                    layer.msg('上传成功');
+                    console.log(res)
+                    $("#playAddress").val(res.movieUrl);
+                } else {
+                    layer.msg('上传失败');
+
+                }
+
+            }
+        });
+
+        //拖拽上传
+        upload.render({
+            elem: '#uploadPoster'
+            ,accept: 'file' //普通文件
+            ,url: '/film/movie/admin/uploadPoster' //改成您自己的上传接口
+            ,done: function(res){
+                if (res.code == "0"){
+                    layer.msg('上传成功');
+                    console.log(res)
+                    $("#poster").val(res.posterUrl);
+                } else {
+                    layer.msg('上传失败');
+                }
+
+            }
+        });
+
         //layui日期选择
         layui.use('laydate', function () {
             var laydate = layui.laydate;

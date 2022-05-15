@@ -347,8 +347,8 @@ public class UserController implements FilmConstant {
 
     @RequestMapping("/admin/updateUser")
     @ResponseBody
-    public String findUserById(int id, String email) {
-        int rows = userService.updateEmail(id, email);
+    public String updateUserById(int id, String username, String email, int type) {
+        int rows = userService.updateUserById(id, username, email, type);
         if (rows != 1) {
             return FilmUtil.getJSONString(1);
         }

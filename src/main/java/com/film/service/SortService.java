@@ -56,4 +56,8 @@ public class SortService {
     public List<Sort> searchSorts(String name, int offset, int limit) {
         return sortMapper.selectSortsByName(name, offset, limit);
     }
+
+    public int updateSort(Sort sort) {
+        return sortMapper.updateNameById(sort.getId(), sort.getName());
+    }
 }

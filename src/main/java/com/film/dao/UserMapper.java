@@ -28,4 +28,6 @@ public interface UserMapper {
     int selectUserCount();
 
     List<User> selectUserByIdAndEmail(String username, String email, int offset, int limit);
+
+    int updateUserById(int id, String username, String email, int type);
 }
